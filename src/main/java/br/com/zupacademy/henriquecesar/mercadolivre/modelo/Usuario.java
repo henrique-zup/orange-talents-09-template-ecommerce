@@ -26,6 +26,10 @@ public class Usuario {
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
     
+    @Deprecated
+    public Usuario() {
+    }
+    
     public Usuario(@NotBlank @Email String login, @NotBlank String senha, @NotNull LocalDateTime dataCadastro) {
         this.login = login;
         this.senha = senha;
