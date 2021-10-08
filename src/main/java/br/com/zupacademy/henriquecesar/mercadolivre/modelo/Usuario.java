@@ -34,6 +34,18 @@ public class Usuario {
         this.login = login;
         this.senha = senha;
         this.dataCadastro = dataCadastro;
-    }    
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
 }
