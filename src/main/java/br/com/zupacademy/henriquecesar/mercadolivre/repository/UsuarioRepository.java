@@ -8,6 +8,6 @@ import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Usuario;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
-    Optional<Usuario> findUsuarioByLogin(String string);
+    Optional<Usuario> findByLogin(String string);
 
 }

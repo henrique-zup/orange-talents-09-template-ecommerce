@@ -29,7 +29,7 @@ public class EmailUnicoValidator implements Validator {
         }
         
         UsuarioForm form = (UsuarioForm) target;
-        Optional<Usuario> usuario = usuarioRepository.findUsuarioByLogin(form.getLogin());
+        Optional<Usuario> usuario = usuarioRepository.findByLogin(form.getLogin());
         
         if (usuario.isPresent()) {
             errors.rejectValue("login", "e-mail já cadastrado");
