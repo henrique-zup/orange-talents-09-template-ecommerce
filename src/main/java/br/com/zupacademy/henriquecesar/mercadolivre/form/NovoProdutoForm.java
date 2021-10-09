@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import br.com.zupacademy.henriquecesar.mercadolivre.form.validator.ExisteId;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Categoria;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Produto;
+import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Usuario;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.CategoriaRepository;
 
 public class NovoProdutoForm {
@@ -61,10 +62,10 @@ public class NovoProdutoForm {
         return categoriaId;
     }
 
-    public Produto toModel(CategoriaRepository categoriaRepository) {
+    public Produto toModel(CategoriaRepository categoriaRepository, Usuario dono) {
         Categoria categoria = categoriaRepository.findById(categoriaId).get();
         
-        Produto produto = new Produto(nome, valor, quantidadeDisponivel, descricao, categoria);
+        Produto produto = new Produto(nome, valor, quantidadeDisponivel, descricao, categoria, dono);
         produto.setCaracteristicas(caracteristicas.stream()
                 .map(c -> c.toModel(produto)).collect(Collectors.toList()));
         
