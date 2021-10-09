@@ -3,6 +3,8 @@ package br.com.zupacademy.henriquecesar.mercadolivre.modelo;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,19 +47,37 @@ public class Produto {
     @NotNull @Column(nullable = false, length = 1000)
     private LocalDateTime dataCadastro = LocalDateTime.now();
     
+    @ManyToOne
+    private Usuario dono;
+    
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<ImagemProduto> imagens;
+    
     @Deprecated
     public Produto() {}
     
-    public Produto(String nome, BigDecimal valor, Long quantidade, String descricao, Categoria categoria) {
+    public Produto(String nome, BigDecimal valor, Long quantidade, String descricao, Categoria categoria, Usuario dono) {
         this.nome = nome;
         this.valor = valor;
         this.quantidadeDisponivel = quantidade;
         this.descricao = descricao;
         this.categoria = categoria;
+        this.dono = dono;
     }
     
     public void setCaracteristicas(List<Caracteristica> caracteristicas) {
         this.caracteristicas = caracteristicas;
+    }
+
+    public boolean isDono(Usuario usuario) {
+        return this.dono.getId().equals(usuario.getId());
+    }
+
+    public void adicionaLinksImagem(List<String> linksImagens) {
+        Set<ImagemProduto> imagens = linksImagens.stream().map(l -> new ImagemProduto(l, this))
+                .collect(Collectors.toSet());
+        
+        this.imagens.addAll(imagens);
     }
     
     
