@@ -106,6 +106,10 @@ public class Produto {
         return valor;
     }
 
+    public Long getQuantidadeDisponivel() {
+        return quantidadeDisponivel;
+    }
+
     public Set<ImagemProduto> getImagens() {
         return imagens;
     }
