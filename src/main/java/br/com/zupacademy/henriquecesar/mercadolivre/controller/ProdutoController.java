@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Usuario;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.CategoriaRepository;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.ProdutoRepository;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.UsuarioRepository;
+import br.com.zupacademy.henriquecesar.mercadolivre.response.ProdutoDetalhesResponse;
 import br.com.zupacademy.henriquecesar.mercadolivre.service.FakerEmailService;
 import br.com.zupacademy.henriquecesar.mercadolivre.service.FakerUploadService;
 
@@ -130,6 +132,18 @@ public class ProdutoController {
         if (!fakerEmailService.envia(email)) {
             // Realiza tratamento em caso de falha no envio.
         }
+    }
+    
+    @GetMapping("/{idProduto}")
+    public ProdutoDetalhesResponse detalhaProduto(@PathVariable Long idProduto) {
+        Optional<Produto> _produto = produtoRepository.findById(idProduto);
+        
+        if (_produto.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        
+        Produto produto = _produto.get();
+        return new ProdutoDetalhesResponse(produto);
     }
 
 }
