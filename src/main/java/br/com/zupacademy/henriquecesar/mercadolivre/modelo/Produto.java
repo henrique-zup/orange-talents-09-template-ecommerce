@@ -20,6 +20,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import br.com.zupacademy.henriquecesar.mercadolivre.repository.ProdutoRepository;
+
 @Entity
 public class Produto {
     
@@ -143,6 +148,20 @@ public class Produto {
         }
         
         return somaAvaliacoes / numeroAvaliacoes;
+    }
+
+    public boolean isQuantidadeDisponivel(Integer quantidade) {
+        return (quantidadeDisponivel - Long.valueOf(quantidade)) >= 0;
+    }
+    
+    public void diminuiQuantidade(Integer quantidade, ProdutoRepository repository) {
+        if (isQuantidadeDisponivel(quantidade)) {
+            this.quantidadeDisponivel -= quantidade;
+            repository.save(this);
+            return;
+        }
+        
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Quantidade não disponível.");
     }
 
 }
