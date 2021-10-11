@@ -61,5 +61,9 @@ public class UsuarioLogado implements UserDetails {
     public Long getId() {
         return usuario.getId();
     }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
 }
