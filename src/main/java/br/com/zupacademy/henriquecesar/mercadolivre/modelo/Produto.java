@@ -102,4 +102,24 @@ public class Produto {
         return dono;
     }
 
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public Set<ImagemProduto> getImagens() {
+        return imagens;
+    }
+    
+    public Set<Opiniao> getOpinioes() {
+        return opinioes;
+    }
+    
+    public Set<Pergunta> getPerguntas() {
+        return perguntas;
+    }
+
+    public List<Caracteristica> getCaracteristicas() {
+        return caracteristicas;
+    }
+
 }
