@@ -16,15 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.zupacademy.henriquecesar.mercadolivre.config.UsuarioLogado;
+import br.com.zupacademy.henriquecesar.mercadolivre.dto.EmailDTO;
 import br.com.zupacademy.henriquecesar.mercadolivre.form.NovaOpiniaoProdutoForm;
+import br.com.zupacademy.henriquecesar.mercadolivre.form.NovaPerguntaProdutoForm;
 import br.com.zupacademy.henriquecesar.mercadolivre.form.NovasImagensProdutoForm;
 import br.com.zupacademy.henriquecesar.mercadolivre.form.NovoProdutoForm;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Opiniao;
+import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Pergunta;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Produto;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Usuario;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.CategoriaRepository;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.ProdutoRepository;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.UsuarioRepository;
+import br.com.zupacademy.henriquecesar.mercadolivre.service.FakerEmailService;
 import br.com.zupacademy.henriquecesar.mercadolivre.service.FakerUploadService;
 
 @RestController
@@ -42,6 +46,9 @@ public class ProdutoController {
     
     @Autowired
     private FakerUploadService fakerUploadService;
+    
+    @Autowired
+    private FakerEmailService fakerEmailService;
 
     @PostMapping
     public void cadastrarProduto(@RequestBody @Valid NovoProdutoForm form,
@@ -96,6 +103,33 @@ public class ProdutoController {
         produto.adicionaOpiniao(opiniao);
         
         produtoRepository.save(produto);
+    }
+    
+    @PostMapping("/{idProduto}/perguntas")
+    public void publicarPergunta(@PathVariable Long idProduto, @RequestBody @Valid NovaPerguntaProdutoForm form, 
+            @AuthenticationPrincipal UsuarioLogado usuarioLogado) {
+        
+        Usuario usuario = usuarioRepository.findById(usuarioLogado.getId()).get();
+        Optional<Produto> _produto = produtoRepository.findById(idProduto);
+        
+        if (_produto.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        
+        Produto produto = _produto.get();
+        Pergunta pergunta = form.toModel(usuario, produto);
+        produto.adicionaPergunta(pergunta);
+        produtoRepository.save(produto);
+        
+        EmailDTO email = new EmailDTO(
+                produto.getDono().getLogin(),
+                "Nova pergunta do Mercado Livre, produto: " + produto.getNome(),
+                pergunta.getTitulo()
+        );
+        
+        if (!fakerEmailService.envia(email)) {
+            // Realiza tratamento em caso de falha no envio.
+        }
     }
 
 }
