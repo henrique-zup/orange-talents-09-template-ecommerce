@@ -121,5 +121,9 @@ public class Produto {
     public List<Caracteristica> getCaracteristicas() {
         return caracteristicas;
     }
+    
+    public Integer getNumeroAvaliacoes() {
+        return opinioes.size();
+    }
 
 }
