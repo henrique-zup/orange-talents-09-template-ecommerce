@@ -53,6 +53,9 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens;
     
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<Opiniao> opinioes;
+    
     @Deprecated
     public Produto() {}
     
@@ -79,7 +82,9 @@ public class Produto {
         
         this.imagens.addAll(imagens);
     }
-    
-    
+
+    public void adicionaOpiniao(Opiniao opiniao) {
+        this.opinioes.add(opiniao);        
+    }
 
 }
