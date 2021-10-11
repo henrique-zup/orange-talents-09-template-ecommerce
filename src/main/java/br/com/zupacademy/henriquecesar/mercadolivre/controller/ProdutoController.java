@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.zupacademy.henriquecesar.mercadolivre.config.UsuarioLogado;
+import br.com.zupacademy.henriquecesar.mercadolivre.form.NovaOpiniaoProdutoForm;
 import br.com.zupacademy.henriquecesar.mercadolivre.form.NovasImagensProdutoForm;
 import br.com.zupacademy.henriquecesar.mercadolivre.form.NovoProdutoForm;
+import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Opiniao;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Produto;
 import br.com.zupacademy.henriquecesar.mercadolivre.modelo.Usuario;
 import br.com.zupacademy.henriquecesar.mercadolivre.repository.CategoriaRepository;
@@ -69,6 +71,29 @@ public class ProdutoController {
         
         List<String> linksImagens = fakerUploadService.envia(form.getImagens());
         produto.adicionaLinksImagem(linksImagens);
+        
+        produtoRepository.save(produto);
+    }
+    
+    @PostMapping("/{idProduto}/opinioes")
+    public void publicarOpiniao(@PathVariable Long idProduto, @RequestBody @Valid NovaOpiniaoProdutoForm form, 
+            @AuthenticationPrincipal UsuarioLogado usuarioLogado) {
+        
+        Usuario usuario = usuarioRepository.findById(usuarioLogado.getId()).get();
+        Optional<Produto> _produto = produtoRepository.findById(idProduto);
+        
+        if (_produto.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        
+        Produto produto = _produto.get();
+        
+        if (!usuario.comprouProduto(produto)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        
+        Opiniao opiniao = form.toModel(usuario, produto);
+        produto.adicionaOpiniao(opiniao);
         
         produtoRepository.save(produto);
     }
