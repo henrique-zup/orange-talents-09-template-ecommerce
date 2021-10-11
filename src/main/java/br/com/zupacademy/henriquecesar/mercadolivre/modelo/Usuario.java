@@ -48,4 +48,8 @@ public class Usuario {
         return id;
     }
 
+    public boolean comprouProduto(Produto produto) {
+        return true; // MOCK
+    }
+
 }
