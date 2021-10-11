@@ -125,5 +125,20 @@ public class Produto {
     public Integer getNumeroAvaliacoes() {
         return opinioes.size();
     }
+    
+    public Double getMediaAvaliacoes() {
+        Integer numeroAvaliacoes = getNumeroAvaliacoes();
+        double somaAvaliacoes = 0;
+        
+        if (numeroAvaliacoes == 0) {
+            return somaAvaliacoes;
+        }
+        
+        for (Opiniao o : this.opinioes) {
+            somaAvaliacoes += o.getNota();
+        }
+        
+        return somaAvaliacoes / numeroAvaliacoes;
+    }
 
 }
