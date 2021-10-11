@@ -48,6 +48,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
         .antMatchers(HttpMethod.POST, "/usuarios").permitAll()
+        .antMatchers(HttpMethod.GET, "/produtos/**").permitAll()
         .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
         .anyRequest().authenticated()
         .and().cors()
