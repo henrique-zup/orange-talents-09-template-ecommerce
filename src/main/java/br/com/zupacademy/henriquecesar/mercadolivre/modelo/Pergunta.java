@@ -47,4 +47,12 @@ public class Pergunta {
         return titulo;
     }
 
+    public LocalDateTime getData() {
+        return data;
+    }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
 }
