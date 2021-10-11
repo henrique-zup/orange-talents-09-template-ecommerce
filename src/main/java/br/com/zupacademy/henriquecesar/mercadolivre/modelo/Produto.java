@@ -56,6 +56,9 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<Opiniao> opinioes;
     
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<Pergunta> perguntas;
+    
     @Deprecated
     public Produto() {}
     
@@ -85,6 +88,18 @@ public class Produto {
 
     public void adicionaOpiniao(Opiniao opiniao) {
         this.opinioes.add(opiniao);        
+    }
+
+    public void adicionaPergunta(Pergunta pergunta) {
+        this.perguntas.add(pergunta);
+    }
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public Usuario getDono() {
+        return dono;
     }
 
 }
