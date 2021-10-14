@@ -50,6 +50,8 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/usuarios").permitAll()
         .antMatchers(HttpMethod.GET, "/produtos/**").permitAll()
         .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+        .antMatchers(HttpMethod.POST, "/api-nota-fiscal").permitAll()
+        .antMatchers(HttpMethod.POST, "/api-ranking").permitAll()
         .anyRequest().authenticated()
         .and().cors()
         .and().csrf().disable()
